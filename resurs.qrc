@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="buton">but.png</file>
+    </qresource>
+</RCC>
