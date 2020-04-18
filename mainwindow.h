@@ -19,36 +19,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_comboBox_currentIndexChanged(int index);
 
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
-
-    void on_pushButton_5_clicked();
-
-    void on_pushButton_9_clicked();
-
-    void on_pushButton_8_clicked();
-
-    void on_pushButton_7_clicked();
-
-    void on_pushButton_6_clicked();
+    void on_tableWidget_2_cellChanged(int row, int column);
 
 private:
     Ui::MainWindow *ui;
 
-    int calculate(int x, int y, QString action);
-
-    void buildTable();
-
-    QStringList getOrder();
-
     void fillVariables(int rows, int column, int multiplier, int variables);
 
-    bool moveToOutput(QString stack, QString current);
+    void buildKarnoTable();
 };
 
 #endif // MAINWINDOW_H
