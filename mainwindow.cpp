@@ -86,9 +86,9 @@ void MainWindow::on_tableWidget_2_cellChanged(int row, int column)
     {
         for (int j = 0; j < ui->tableWidget_2->columnCount(); j++)
         {
-            item = ui->tableWidget_2->itemAt(i,j);
+            item = ui->tableWidget_2->item(i,j);
 
-            if (item->text() != '0' && item->text() != '1')
+            if (item == NULL || item->text() != '0' && item->text() != '1')
                 return;
         }
     }
