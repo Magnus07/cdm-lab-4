@@ -81,8 +81,56 @@ void MainWindow::buildKarnoTable()
         }
     }
 
+    simplifySet(simplifySet(set));
+
     ui->tableWidget->resizeRowsToContents();
     ui->tableWidget->resizeColumnsToContents();
+}
+
+
+QStringList MainWindow::simplifySet(QStringList set)
+{
+    for (int i = 0; i < set.length()-1; i++)
+    {
+        std::vector<int> indexes;
+        int max = 0;
+        int length = 0;
+        for (int j = i+1; j < set.length();j++)
+        {
+            int current = 0;
+            length = 0;
+            for (int k = 0; k < set[i].length(); k++)
+            {
+                if (set[i][k] != " " && set[j][k] != " " && set[i][k] == set[j][k])
+                    current++;
+                if (set[i][k] != " ")
+                    length++;
+            }
+            if (current > max)
+            {
+                indexes.clear();
+                indexes.push_back(j);
+                max = current;
+            }
+            else if (current == max)
+            {
+                indexes.push_back(j);
+            }
+        }
+        if (max == length - 1)
+        {
+            for (int j = 0;j < set[i].length(); j++)
+            {
+                if (set[indexes[0]][j] != set[i][j])
+                {
+                    set[i].replace(j,1," ");
+                    set[indexes[0]].replace(j,1," ");
+                }
+            }
+            set.removeAt(indexes[0]);
+        }
+    }
+    return set;
 }
 
 

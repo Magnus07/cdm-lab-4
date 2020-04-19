@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <math.h>
-#include <stack>
+#include <vector>
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +29,8 @@ private:
     void fillVariables(int rows, int column, int multiplier, int variables);
 
     void buildKarnoTable();
+
+    QStringList simplifySet(QStringList set);
 };
 
 #endif // MAINWINDOW_H
