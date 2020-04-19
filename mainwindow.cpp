@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::buildKarnoTable()
 {
+    // Конфігурація таблиці Карно
     int rows = 2;
     int columns = 2;
     QStringList hheaders = {"0","1"};
@@ -23,11 +24,62 @@ void MainWindow::buildKarnoTable()
     if (ui->comboBox->currentIndex() >= 2) {columns = 4; hheaders[0] = "00"; hheaders[1] ="01";hheaders.append("11");hheaders.append("10");}
     if (ui->comboBox->currentIndex() == 3) {rows = 4;vheaders[0] = "00"; vheaders[1] ="01";vheaders.append("11");vheaders.append("10");}
 
+    ui->tableWidget->setRowCount(rows);
+    ui->tableWidget->setColumnCount(columns);
+
     ui->tableWidget->setHorizontalHeaderLabels(hheaders);
     ui->tableWidget->setVerticalHeaderLabels(vheaders);
 
-    ui->tableWidget->setRowCount(rows);
-    ui->tableWidget->setColumnCount(columns);
+    QStringList set;
+
+    // Отримуємо набори значень, де функція дорвінює 1
+    for (int i = 0; i < ui->tableWidget_2->rowCount();i++)
+    {
+        if (ui->tableWidget_2->item(i,ui->tableWidget_2->columnCount()-1)->text() == "1")
+        {
+            QString item;
+            for (int j = 0;j < ui->tableWidget_2->columnCount()-1; j++)
+            {
+                item.append(ui->tableWidget_2->item(i,j)->text());
+            }
+            set.append(item);
+        }
+    }
+
+    // Парсимо отримані набори і встановлюємо одиниці в таблицю Карно
+    for (int i = 0; i < set.length();i++)
+    {
+        QString item = set[i];
+        int columnIndex = 0;
+
+        if (ui->comboBox->currentIndex() >= 2)
+        {
+            columnIndex = hheaders.indexOf(item.left(2));
+            item.remove(0,2);
+        }
+        else
+        {   columnIndex = hheaders.indexOf(item.left(1));
+            item.remove(0,1);
+        }
+
+        int rowIndex = vheaders.indexOf(item);
+
+        QTableWidgetItem *tableItem = new QTableWidgetItem("1");
+        ui->tableWidget->setItem(rowIndex,columnIndex,tableItem);
+
+    }
+
+    // Заповнюємо вільні місця нулями
+    for (int i = 0; i < ui->tableWidget->rowCount();i++)
+    {
+        for (int j = 0; j < ui->tableWidget->columnCount(); j++)
+        {
+            QTableWidgetItem * item = ui->tableWidget->item(i,j);
+            QTableWidgetItem * zeroItem = new QTableWidgetItem("0");
+            if (item == NULL)
+                ui->tableWidget->setItem(i,j,zeroItem);
+        }
+    }
 
     ui->tableWidget->resizeRowsToContents();
     ui->tableWidget->resizeColumnsToContents();
@@ -59,6 +111,7 @@ void MainWindow::fillVariables(int rows, int column, int multiplier, int variabl
 
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
+    // Конфігурація таблиці звичайної
     if (index == 0)
         return;
     int rows = 4;
@@ -68,11 +121,15 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
     headers.append("f");
 
+    // очищаємо таблицю
+    ui->tableWidget_2->clear();
+
     ui->tableWidget_2->setRowCount(rows);
     ui->tableWidget_2->setColumnCount(index + 2);
 
     ui->tableWidget_2->setHorizontalHeaderLabels(headers);
 
+    // заповнюємо значення змінних
     fillVariables(rows,0,2,index+1);
 
     ui->tableWidget_2->resizeRowsToContents();
@@ -84,6 +141,7 @@ void MainWindow::on_tableWidget_2_cellChanged(int row, int column)
 {
     QTableWidgetItem * item;
 
+    // перевіряємо, чи вся таблиця заповнена
     for (int i = 0; i < ui->tableWidget_2->rowCount();i++)
     {
         for (int j = 0; j < ui->tableWidget_2->columnCount(); j++)
@@ -94,6 +152,7 @@ void MainWindow::on_tableWidget_2_cellChanged(int row, int column)
                 return;
         }
     }
-
+    // очищаємо таблицю
+    ui->tableWidget->clear();
     buildKarnoTable();
 }
