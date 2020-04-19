@@ -17,12 +17,14 @@ void MainWindow::buildKarnoTable()
 {
     int rows = 2;
     int columns = 2;
-    QStringList headers = {"x\ny"};
+    QStringList hheaders = {"x"};
+    QStringList vheaders = {"y"};
 
-    if (ui->comboBox->currentIndex() >= 2)
-        columns = 4;
-    if (ui->comboBox->currentIndex() == 3)
-        rows = 4;
+    if (ui->comboBox->currentIndex() >= 2) {columns = 4; hheaders[0] = {"xy"};vheaders[0]={"z"};}
+    if (ui->comboBox->currentIndex() == 3) {rows = 4; hheaders[0] = {"xy"};vheaders[0].append("t");}
+
+    ui->tableWidget->setHorizontalHeaderLabels(hheaders);
+    ui->tableWidget->setVerticalHeaderLabels(vheaders);
 
     ui->tableWidget->setRowCount(rows);
     ui->tableWidget->setColumnCount(columns);
