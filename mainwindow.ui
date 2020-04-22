@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>CDM LW 3 by Sezonchik S.S. &amp; Pinchuk S.S.</string>
+   <string>CDM LW 3 by Sezonchik S.S. &amp; Pinchuk S.S. &amp; OpenSource Software</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -76,18 +76,11 @@ background-color: rgb(247, 247, 247);</string>
     <item row="1" column="0">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Results</string>
+       <string>Result</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -104,7 +97,7 @@ background-color: rgb(247, 247, 247);</string>
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
