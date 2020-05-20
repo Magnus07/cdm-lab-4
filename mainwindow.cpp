@@ -253,25 +253,25 @@ void MainWindow::buildKarnoTable()
     for (int i = 0; i < set.length();i++)
     {
         QString item = set[i];
-        QString tmp;
+//        QString tmp;
         int columnIndex = 0;
 
         if (ui->comboBox->currentIndex() >= 2)
         {
-            columnIndex = hheaders.indexOf(item.right(2));
-            //            item.remove(item.right(2));
+            columnIndex = hheaders.indexOf(item.left(2));
+                        item.remove(item.left(2));
 
-            if(ui->comboBox->currentIndex() ==2)tmp=item.left(1);
-            if(ui->comboBox->currentIndex() ==3) tmp=item.left(2);
+//            if(ui->comboBox->currentIndex() ==2)tmp=item.left(1);
+//            if(ui->comboBox->currentIndex() ==3) tmp=item.left(2);
 
         }
         else
-        {   columnIndex = hheaders.indexOf(item.right(1));
-            //            item.remove(item.right(1));
-            if(ui->comboBox->currentIndex() ==1)tmp=item.left(1);
+        {   columnIndex = hheaders.indexOf(item.left(1));
+                        item.remove(item.left(1));
+//            if(ui->comboBox->currentIndex() ==1)tmp=item.left(1);
         }
 
-        int rowIndex = vheaders.indexOf(tmp);
+        int rowIndex = vheaders.indexOf(item);
 
         QTableWidgetItem *tableItem = new QTableWidgetItem("1");
         ui->tableWidget->setItem(rowIndex,columnIndex,tableItem);
