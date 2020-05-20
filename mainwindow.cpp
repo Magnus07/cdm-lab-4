@@ -1,4 +1,4 @@
-﻿#include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <fstream>
@@ -79,7 +79,7 @@ void output(stringstream& file,char* a,int n) // формуємо вивід
         if(a[i]=='0') file<<(char)('a'+i)<<'\'';
         if(a[i]=='1') file<<(char)('a'+i);
     }
-    file<<'+';
+    file<<'*';
 }
 int count(char* table,char* a,int n,int N) // Порахуємо, скільки найменших елементів задовольняє 1, зміщення якого включено до масиву a
 {
@@ -199,6 +199,7 @@ void MainWindow::getResult(int variables, int rows, int columns)
     }
 
     QString out = QString::fromStdString(result.str());
+    out.replace('a','x');out.replace('b','y');out.replace('c','x');out.replace('d','t');
     out.remove(out.size()-1,1);
     ui->label->setText(out);
 }
@@ -252,19 +253,25 @@ void MainWindow::buildKarnoTable()
     for (int i = 0; i < set.length();i++)
     {
         QString item = set[i];
+        QString tmp;
         int columnIndex = 0;
 
         if (ui->comboBox->currentIndex() >= 2)
         {
-            columnIndex = hheaders.indexOf(item.left(2));
-            item.remove(0,2);
+            columnIndex = hheaders.indexOf(item.right(2));
+            //            item.remove(item.right(2));
+
+            if(ui->comboBox->currentIndex() ==2)tmp=item.left(1);
+            if(ui->comboBox->currentIndex() ==3) tmp=item.left(2);
+
         }
         else
-        {   columnIndex = hheaders.indexOf(item.left(1));
-            item.remove(0,1);
+        {   columnIndex = hheaders.indexOf(item.right(1));
+            //            item.remove(item.right(1));
+            if(ui->comboBox->currentIndex() ==1)tmp=item.left(1);
         }
 
-        int rowIndex = vheaders.indexOf(item);
+        int rowIndex = vheaders.indexOf(tmp);
 
         QTableWidgetItem *tableItem = new QTableWidgetItem("1");
         ui->tableWidget->setItem(rowIndex,columnIndex,tableItem);
@@ -277,9 +284,10 @@ void MainWindow::buildKarnoTable()
         for (int j = 0; j < ui->tableWidget->columnCount(); j++)
         {
             QTableWidgetItem * item = ui->tableWidget->item(i,j);
-            QTableWidgetItem * zeroItem = new QTableWidgetItem("0");
-            if (item == NULL)
-                ui->tableWidget->setItem(i,j,zeroItem);
+            if (item == NULL){
+
+                QTableWidgetItem * zeroItem = new QTableWidgetItem("0");
+                ui->tableWidget->setItem(i,j,zeroItem);}
         }
     }
     getResult(ui->comboBox->currentIndex()+1,rows,columns);
@@ -293,7 +301,6 @@ void MainWindow::fillVariables(int rows, int column, int multiplier, int variabl
 {   // умова виходу з рекурсії
     if (variables == column)
         return;
-
     // ознака нуликів і одиничок
     bool isIt = false;
     for (int i = 1; i <= rows; i++)
@@ -321,7 +328,6 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     QStringList headers = {"x","y"};
     if (index == 2){rows = 8;headers.append("z");}
     if (index == 3){rows = 16;headers.append("z");headers.append("t");}
-
     headers.append("f");
 
     // очищаємо таблицю
