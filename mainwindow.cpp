@@ -1,4 +1,4 @@
-﻿#include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <fstream>
@@ -29,8 +29,8 @@ void MainWindow::buildKarnoTable()
     // Конфігурація таблиці Карно
     int rows = 2;
     int columns = 2;
-
-    if (ui->comboBox->currentIndex() >= 2) {columns = 4; hheaders[0] = "00"; hheaders[1] ="01";hheaders.append("11");hheaders.append("10");}
+    if (ui->comboBox->currentIndex() == 1){vheaders[0]="0";vheaders[1]="1";hheaders[0]="0";hheaders[1]="1";}
+    if (ui->comboBox->currentIndex() >= 2) {columns = 4; hheaders[0] = "00"; hheaders[1] ="01";hheaders.append("11");hheaders.append("10");vheaders[0]="0";vheaders[1]="1";}
     if (ui->comboBox->currentIndex() == 3) {rows = 4;vheaders[0] = "00"; vheaders[1] ="01";vheaders.append("11");vheaders.append("10");}
 
     ui->tableWidget->setRowCount(rows);
@@ -65,8 +65,8 @@ void MainWindow::buildKarnoTable()
         if (ui->comboBox->currentIndex() >= 2)
         {
             columnIndex = hheaders.indexOf(item.left(2));
-           if(ui->comboBox->currentIndex() ==3)tmp=item.right(2);
-           if(ui->comboBox->currentIndex() ==2)tmp=item.right(1);
+            if(ui->comboBox->currentIndex() ==3)tmp=item.right(2);
+            if(ui->comboBox->currentIndex() ==2)tmp=item.right(1);
 
         }
         else
@@ -372,7 +372,7 @@ void MainWindow::on_pushButton_clicked()
     // оптимізуємо виведення
     optimize();
 
-    translate(ui->label->text().remove("F = ").split("&"));
+    //    translate(ui->label->text().remove("F = ").split("&"));
 }
 
 void MainWindow::on_pushButton_2_clicked()
