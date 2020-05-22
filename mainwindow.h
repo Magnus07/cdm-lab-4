@@ -6,6 +6,7 @@
 #include <math.h>
 #include <vector>
 #include <string>
+#include <QTableWidgetItem>
 
 using namespace std;
 
@@ -38,12 +39,24 @@ private slots:
 
     void on_tableWidget_2_cellChanged(int row, int column);
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     void fillVariables(int rows, int column, int multiplier, int variables);
 
     void buildKarnoTable();
+
+    QString getItemsCode(QTableWidgetItem * item);
+
+    QString calculate(QList<QString>selected);
+
+    void optimize();
 
 //    bool hasCommonPair(Pairs pair,vector <vector <Pairs>> &groups, int skip);
 

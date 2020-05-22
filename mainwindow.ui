@@ -82,6 +82,42 @@ background-color: rgb(247, 247, 247);</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Додати область</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Очистити результат</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Спростити</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -99,7 +135,7 @@ background-color: rgb(247, 247, 247);</string>
           </font>
          </property>
          <property name="text">
-          <string/>
+          <string>F = </string>
          </property>
         </widget>
        </item>
@@ -114,7 +150,7 @@ background-color: rgb(247, 247, 247);</string>
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
