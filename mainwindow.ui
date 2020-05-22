@@ -42,6 +42,11 @@ background-color: rgb(247, 247, 247);</string>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QComboBox" name="comboBox">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>UNDEFINED</string>
@@ -103,18 +108,6 @@ background-color: rgb(247, 247, 247);</string>
          </property>
          <property name="text">
           <string>Очистити результат</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Спростити</string>
          </property>
         </widget>
        </item>
