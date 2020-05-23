@@ -234,7 +234,10 @@ void MainWindow::optimize()
                     if (container[i][k] != container[j][k])
                     {   // якщо десь порожнє місце, то виходимо з циклу
                         if (container[i][k] == 'x' || container[j][k] == 'x')
+                        {
+                            differ = 2;
                             break;
+                        }
                         else
                         {
                             differ++;
@@ -264,50 +267,42 @@ void MainWindow::optimize()
 }
 
 
-//QString MainWindow::translate(QStringList content)
-//{
-//    ui->label->setText("F = ");
+void MainWindow::translate()
+{
+    QStringList content = ui->label->text().remove("F = ").split("&");
+    ui->label->setText("F = ");
 
-//    for (int i = 0; i < content.length(); i++)
-//    {
-//        for (int j = 0; j < content[i].length();j++)
-//        {
-//            if (content[i][j] != 'x')
-//            {
-//                if (j == 0)
-//                {
-//                    if (content[i][j] == '0')
-//                        ui->label->setText(ui->label->text() + "!x");
-//                    else
-//                        ui->label->setText(ui->label->text() + "x");
-//                }
-//                if (j == 1)
-//                {
-//                    if (content[i][j] == '0')
-//                        ui->label->setText(ui->label->text() + QString("!y"));
-//                    else
-//                        ui->label->setText(ui->label->text() + "y");
-//                }
-//                if (j == 2)
-//                {
-//                    if (content[i][j] == '0')
-//                        ui->label->setText(ui->label->text() + "!z");
-//                    else
-//                        ui->label->setText(ui->label->text() + "z");
-//                }
-//                if (j == 3)
-//                {
-//                    if (content[i][j] == '0')
-//                        ui->label->setText(ui->label->text() + "!t");
-//                    else
-//                        ui->label->setText(ui->label->text() + "t");
-//                }
-//            }
-//        }
-////        if (i != content.length()-1)
-////            ui->label->setText(ui->label->text() + "&");
-//    }
-//}
+    for (int i = 0; i < content.length(); i++)
+    {
+        for (int j = 0; j < content[i].length();j++)
+        {
+            if (content[i][j] != 'x' && content[i][j] == '0')
+            {
+                if (j == 0)
+                    ui->label->setText(ui->label->text() + "!x");
+                else if (j == 1)
+                    ui->label->setText(ui->label->text() + "!y");
+                else if (j == 2)
+                    ui->label->setText(ui->label->text() + "!z");
+                else if (j == 3)
+                    ui->label->setText(ui->label->text() + "!t");
+            }
+            else if (content[i][j] != 'x' && content[i][j] == '1')
+            {
+                if (j == 0)
+                    ui->label->setText(ui->label->text() + "X");
+                else if (j == 1)
+                    ui->label->setText(ui->label->text() + "Y");
+                else if (j == 2)
+                    ui->label->setText(ui->label->text() + "Z");
+                else if (j == 3)
+                    ui->label->setText(ui->label->text() + "T");
+            }
+        }
+        if (i != content.length()-1)
+            ui->label->setText(ui->label->text() + "&");
+    }
+}
 
 
 void MainWindow::on_pushButton_clicked()
@@ -371,12 +366,15 @@ void MainWindow::on_pushButton_clicked()
     }
     // оптимізуємо виведення
     optimize();
-
-    //    translate(ui->label->text().remove("F = ").split("&"));
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {   // очищення
     ui->label->setText("F = ");
     used.clear();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    translate();
 }
