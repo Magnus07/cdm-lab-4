@@ -7,6 +7,7 @@
 
 // зберігання використаних областей
 QList<QList<QTableWidgetItem*>> used;
+QList<QString> codes;
 QStringList hheaders = {"0","1"};
 QStringList vheaders = {"0","1"};
 
@@ -29,7 +30,7 @@ void MainWindow::buildKarnoTable()
     // Конфігурація таблиці Карно
     int rows = 2;
     int columns = 2;
-    if (ui->comboBox->currentIndex() == 1){vheaders[0]="0";vheaders[1]="1";hheaders[0]="0";hheaders[1]="1";}
+    if (ui->comboBox->currentIndex() == 1) {vheaders[0]="0";vheaders[1]="1";hheaders[0]="0";hheaders[1]="1";}
     if (ui->comboBox->currentIndex() >= 2) {columns = 4; hheaders[0] = "00"; hheaders[1] ="01";hheaders.append("11");hheaders.append("10");vheaders[0]="0";vheaders[1]="1";}
     if (ui->comboBox->currentIndex() == 3) {rows = 4;vheaders[0] = "00"; vheaders[1] ="01";vheaders.append("11");vheaders.append("10");}
 
@@ -166,7 +167,146 @@ void MainWindow::on_tableWidget_2_cellChanged(int row, int column)
     }
     // очищаємо таблицю
     ui->tableWidget->clear();
+
+    ui->label->setText("F = ");
+    ui->label_2->setText("F = ");
+    used.clear();
+
     buildKarnoTable();
+
+    silentMode();
+}
+
+struct Used
+{
+    QString code;
+    bool used = false;
+};
+
+
+struct UsedTimes
+{
+    QString code;
+    ushort times = 0;
+    QString ticks;
+};
+
+
+void MainWindow::runMcCl(QLabel * label)
+{
+    QList<QString> output;
+    QList<Used> usedd;
+    QList<UsedTimes> utlist;
+
+    for (int i = 0; i < codes.length();i++)
+    {
+        Used item;
+        item.code = codes[i];
+        usedd.append(item);
+
+        UsedTimes ut;
+        ut.code = codes[i];
+        utlist.append(ut);
+    }
+
+    for (int i = 0; i < codes.length()-1;i++)
+    {
+        for (int j = i+1;j < codes.length();j++)
+        {
+            ushort differ = 0;
+            int index = -1;
+            for (int k = 0; k < codes[i].length();k++)
+            {
+                if (codes[i][k] != codes[j][k])
+                {
+                    // якщо десь порожнє місце, то виходимо з циклу
+                    if (codes[i][k] == 'x' || codes[j][k] == 'x')
+                    {
+                        differ = 2;
+                        break;
+                    }
+                    else
+                    {
+                        differ++;
+                        index = k;
+                    }
+                }
+            } // якщо відрізняється одна змінна
+            if (differ == 1)
+            {   // видаляємо її і повторюваний елемент
+                QString out = codes[i];
+                out[index] = 'x';
+                output.append(out);
+                usedd[i].used = true;
+                usedd[j].used = true;
+            }
+        }
+    }
+
+    for (int i = 0; i < usedd.length();i++)
+    {
+        if (usedd[i].used)
+        {
+            usedd.removeAt(i);
+            i--;
+        }
+        else
+            output.append(usedd[i].code);
+    }
+
+    output.removeDuplicates();
+
+
+    // пошук ядра
+    for (int i = 0; i < utlist.length();i++)
+    {
+        for (int j = 0; j < output.length();j++)
+        {
+            bool contains = false;
+
+            for (int k = 0; k < utlist[i].code.length(); k++)
+            {
+                if (output[j][k] == 'x' || output[j][k] == utlist[i].code[k])
+                    contains = true;
+                else
+                {
+                    contains = false;
+                    break;
+                }
+            }
+            if (contains)
+            {
+                utlist[i].times++;
+                utlist[i].ticks += output[j];
+            }
+        }
+        if (utlist[i].times == 1)
+        {
+            if (label->text() == ("F = "))
+                label->setText(label->text() + utlist[i].ticks);
+            else
+                label->setText(label->text() + "&" + utlist[i].ticks);
+        }
+    }
+
+    optimize(label);
+}
+
+
+void MainWindow::silentMode()
+{
+    codes.clear();
+    for (int i = 0; i < ui->tableWidget->rowCount();i++)
+    {
+        for (int j = 0; j < ui->tableWidget->columnCount();j++)
+        {
+            if (ui->tableWidget->item(i,j)->text() == "1")
+                codes.append(getItemsCode(ui->tableWidget->item(i,j)));
+        }
+    }
+    runMcCl(ui->label_2);
+    optimize(ui->label_2);
+    translate(ui->label_2);
 }
 
 // отримання двійкових кодів з карти Карно
@@ -216,9 +356,9 @@ QString MainWindow::calculate(QList<QString>selected)
 
 
 // оптимізація реузльтату
-void MainWindow::optimize()
+void MainWindow::optimize(QLabel * label)
 {   // отримуємо усі терми
-    QList<QString> container = ui->label->text().remove("F = ").split("&");
+    QList<QString> container = label->text().remove("F = ").split("&");
     // якщо їх більше одного
     if (container.length() > 1)
     {   // співставляємо кожен з наступним
@@ -253,24 +393,24 @@ void MainWindow::optimize()
             }
         }
 
-        // втсановлюємо новий результат
-        ui->label->setText("F = ");
+        // встановлюємо новий результат
+        label->setText("F = ");
 
         for (int i = 0; i < container.length(); i++)
         {
-            if (ui->label->text() == ("F = "))
-                ui->label->setText(ui->label->text() + container[i]);
+            if (label->text() == ("F = "))
+                label->setText(label->text() + container[i]);
             else
-                ui->label->setText(ui->label->text() + "&" + container[i]);
+                label->setText(label->text() + "&" + container[i]);
         }
     }
 }
 
 
-void MainWindow::translate()
+void MainWindow::translate(QLabel* label)
 {
-    QStringList content = ui->label->text().remove("F = ").split("&");
-    ui->label->setText("F = ");
+    QStringList content = label->text().remove("F = ").split("&");
+    label->setText("F = ");
 
     for (int i = 0; i < content.length(); i++)
     {
@@ -279,28 +419,28 @@ void MainWindow::translate()
             if (content[i][j] != 'x' && content[i][j] == '0')
             {
                 if (j == 0)
-                    ui->label->setText(ui->label->text() + "!x");
+                    label->setText(label->text() + "!x");
                 else if (j == 1)
-                    ui->label->setText(ui->label->text() + "!y");
+                    label->setText(label->text() + "!y");
                 else if (j == 2)
-                    ui->label->setText(ui->label->text() + "!z");
+                    label->setText(label->text() + "!z");
                 else if (j == 3)
-                    ui->label->setText(ui->label->text() + "!t");
+                    label->setText(label->text() + "!t");
             }
             else if (content[i][j] != 'x' && content[i][j] == '1')
             {
                 if (j == 0)
-                    ui->label->setText(ui->label->text() + "X");
+                    label->setText(label->text() + "X");
                 else if (j == 1)
-                    ui->label->setText(ui->label->text() + "Y");
+                    label->setText(label->text() + "Y");
                 else if (j == 2)
-                    ui->label->setText(ui->label->text() + "Z");
+                    label->setText(label->text() + "Z");
                 else if (j == 3)
-                    ui->label->setText(ui->label->text() + "T");
+                    label->setText(label->text() + "T");
             }
         }
         if (i != content.length()-1)
-            ui->label->setText(ui->label->text() + "&");
+            label->setText(label->text() + "&");
     }
 }
 
@@ -365,16 +505,17 @@ void MainWindow::on_pushButton_clicked()
             ui->label->setText(ui->label->text() + '&' + getItemsCode(selected[0]));
     }
     // оптимізуємо виведення
-    optimize();
+    optimize(ui->label);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {   // очищення
     ui->label->setText("F = ");
+    ui->label_2->setText("F = ");
     used.clear();
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    translate();
+    translate(ui->label);
 }

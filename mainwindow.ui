@@ -73,7 +73,7 @@ background-color: rgb(247, 247, 247);</string>
         <widget class="QTableWidget" name="tableWidget_2">
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
         </widget>
@@ -82,7 +82,7 @@ background-color: rgb(247, 247, 247);</string>
         <widget class="QTableWidget" name="tableWidget">
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
         </widget>
@@ -134,6 +134,18 @@ background-color: rgb(247, 247, 247);</string>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>F = </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
          <property name="font">
           <font>
            <pointsize>14</pointsize>

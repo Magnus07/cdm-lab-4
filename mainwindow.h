@@ -10,17 +10,6 @@
 
 using namespace std;
 
-// Store index values as pairs
-struct Pair{
-    int i,j;
-
-    Pair(int i, int j)
-    {
-        this->i = i;
-        this->j = j;
-    }
-};
-
 
 namespace Ui {
 class MainWindow;
@@ -56,9 +45,14 @@ private:
 
     QString calculate(QList<QString>selected);
 
-    void translate();
+    void translate(QLabel* label);
 
-    void optimize();
+//    void optimize(QLabel* label);
+    void optimize(QLabel * label);
+
+    void runMcCl(QLabel * label);
+
+    void silentMode();
 };
 
 #endif // MAINWINDOW_H
